@@ -1,15 +1,20 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include <QObject>
 #include<vector>
 #include <mutex>
-#include <WinSock2.h>
-
+#include <WinSock.h>
+#include<Task_struct.h>
+#include <Ack_struct.h>
 
 class Application;
-class Session
+class Session:public QObject
 {
+    Q_OBJECT
 public:
+    explicit Session(QObject *parent = 0);
+
     Session(Application* app);
     ~Session();
 
@@ -25,6 +30,7 @@ public:
     std::vector<uint8_t> buffer;
     uint32_t buffer_offset= 0;
     uint32_t buffer_step =1024*64;
+    void parseBuffer(Ack & ack);
 
 };
 

@@ -5,6 +5,7 @@ Dialog4::Dialog4(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Dialog4)
 {
+
     ui->setupUi(this);
 
     ui->comboBox->addItem("UDP");
@@ -75,4 +76,33 @@ void Dialog4::on_pushButton_ok_clicked()
 Dialog4::~Dialog4()
 {
     delete ui;
+}
+
+void Dialog4::on_m_pOk_clicked()
+{
+    //надо понять куда сохранять заполненные значения
+  if(ui->comboBox->currentText()=="IGMP")
+  {
+    cmd=ui->comboBox_6->currentText();
+    IP_MC= ui->comboBox_5->currentText();
+  }
+  if(ui->comboBox->currentText()=="UDP")
+  {
+
+      int s = ui->comboBox_2->count();
+
+      for (int i = 0; i<ui->comboBox_2->count(); i++)
+      {
+          QStandardItem* item = model->item(i);
+          bool isChecked = item->checkState() == Qt::Checked;
+
+              if (isChecked)
+              {
+                  list.append(item->text());
+              }
+
+      }
+       pack=ui->spinBox->value();
+       IP_MC= ui->comboBox_3->currentText();
+   }
 }

@@ -1,11 +1,9 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
+
 #include <mutex>
 #include "string.h"
-#include "map"
-#include <WinSock2.h>
-#include "winsock.h"
-#include <WS2tcpip.h>
+//#include "map"
 #include<iostream>
 #include <unordered_map>
 #include<session.h>

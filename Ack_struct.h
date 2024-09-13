@@ -13,9 +13,6 @@ struct Ack   // подтверждение от клиента
     std::string id_test;
 };
 
-
-
-
 #pragma pack (pop)
 
 

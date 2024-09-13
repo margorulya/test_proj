@@ -13,9 +13,6 @@
 #include <QStandardItemModel>
 #include <QtWidgets>
 #include <QDialog>
-#include <QDialog>
-#include <QDialog>
-
 
 
 namespace Ui {
@@ -28,16 +25,22 @@ class Dialog4 : public QMainWindow
 
 public:
     explicit Dialog4(QWidget *parent = nullptr);
-
-    ~Dialog4();
-
+   ~Dialog4();
+    QStringList list;
+    int row_index;
 private:
     Ui::Dialog4 *ui;
     QStandardItemModel *model;
+    int pack;
+    QString IP_MC;
+    QString cmd;
+
+
 private slots:
     void changeWidget(int index);
     void on_pushButton_cansel_clicked();
     void  on_pushButton_ok_clicked();
+    void on_m_pOk_clicked();
 };
 
 #endif // DIALOG4_H

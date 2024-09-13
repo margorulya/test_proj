@@ -2,23 +2,25 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<iostream>
+#include<DevMachines/QtitanGrid>
 #include<QtitanDBGrid.h>
 #include<QtitanGrid.h>
 #include<QtitanRibbon.h>
 #include<QtitanBase.h>
 #include <QStandardItemModel>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QtWidgets/QGridLayout>
-#include<DevMachines/QtitanGrid>
+
+
 #include <QTableView>
 #include <QItemDelegate>
 #include <QPushButton>
 #include<QStyledItemDelegate>
 #include <QDate>
-#include <QItemDelegate>
 #include <QApplication>
-#include <QTableView>
 
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -26,9 +28,18 @@
 #include <QFile>
 
 #include <QtGui>
+#include <QMap>
 #include <QMessageBox>
 #include <QVariant>
 #include <string>
+#define WIN32_LEAN_AND_MEAN
+#include "server.h"
+#include "session.h"
+#include "Task_struct.h"
+#include <dialog4.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+
 
 
 QT_BEGIN_NAMESPACE
@@ -45,8 +56,10 @@ public:
 
     void table(int rows,int columns, int num_packet, std::string sender);
     void read_js();
+    QMap<std::string,Task> Taskmap;
+    int s;
 
-    public slots:
+public slots:
     void cellButtonClicked(CellButtonClickEventArgs* args);
     void showTable();
 
@@ -63,7 +76,8 @@ private:
     Qtitan::Grid* grid_2;
     GridTableView* view_2;
     QJsonDocument doc;
-
+signals:
+ void send_to_server();
 
 };
 

@@ -31,9 +31,7 @@ bool init_socket(int port, SOCKET& socket)
     }
 
     BOOL l = TRUE;
-    ioctlsocket (socket, FIONBIO, (unsigned long* ) &l);
-
-    ioctlsocket(socket, NULL, NULL);
+    ioctlsocket (socket, FIONBIO, (unsigned long* ) &l); // неблокирующий режим
 
     if (listen(socket, SOMAXCONN) == SOCKET_ERROR)
     {
@@ -45,7 +43,7 @@ bool init_socket(int port, SOCKET& socket)
     return true;
  }
 
-Server::Server() : app()
+Server::Server(QObject *parent) : QObject(parent), app()
 {
    init_socket(4444, app.tcp_server);
 
@@ -75,14 +73,12 @@ Server::~Server()
             }
         }
     }
-    delete mainThread;
+   delete mainThread;
 }
 
 void Server::SelectThread()
 {    
    // int smax = (ServSocket)+1;
-
-
     timeval time_out; // Таймаут
     time_out.tv_sec = 1000;
     struct sockaddr_in clientname;
@@ -137,24 +133,33 @@ void Server::SelectThread()
                          std::lock_guard<std::mutex>(session->session_mutex);
                          session->counter++;
 
+                         Ack ack;
                          int res = 0;
                          while (res != 0)
                          {
+                             res =  recv(clientSocket, (char*)(session->buffer.data() + session->buffer_offset), session->buffer.size() - session->buffer_offset, 0);
+                             session->parseBuffer(ack);
 
-                         //  int iResult =  recv(clientSocket, session->buffer.data() + session->buffer_offset, session->buffer.size() - session->buffer_offset, 0);
-                             // res = read(socket, session->buffer);
+                             if(res>0)
+                             {
+                                 session->buffer_offset += res;
+                             }
+
                          }
-
-                        // session->parse();
-                        // session->counter--;
+                       session->counter--;
                      }
                      session = NULL;
                  }
-            }
+             }
           }
     }
 }
 
+void Server::send_task()
+{
 
+
+
+}
 
 

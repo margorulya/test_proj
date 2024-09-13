@@ -3,11 +3,12 @@
 #include "dialog4.h"
 #include "ui_dialog4.h"
 
-#include<iostream>
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
+
 {
+
+    Server server;
 
     ui->setupUi(this);
     read_js();
@@ -67,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent)
     //Add cell button to the column.
     column->addButton(GridColumn::ChoiceButtonIcon, Qtitan::AtBeginning);
     connect(column, SIGNAL(buttonClicked(CellButtonClickEventArgs*)), this, SLOT(cellButtonClicked(CellButtonClickEventArgs*)));
+    connect(this,SIGNAL(send_to_object()),&server,SLOT(send_task()));
+     //Соединение 1 - от виджета к объекту
     //connect(ui->comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::showTable);
     //сегодня уже ничего делать не хочу лучше потренируюсь на скоропечатанье
 
@@ -85,6 +88,7 @@ void MainWindow::showTable()
  void  MainWindow:: table(int rows,int columns, int num_packet, std::string sender)
  {
      view_2 =ui->grid->view<GridTableView>();
+    // view_2->beginUpdate();
      QStandardItemModel *model;
      model = new QStandardItemModel(rows, columns);
      model->setHorizontalHeaderLabels(QStringList() << "    " << "Кол-во пакетов отправлено" << "Принято"<<" IP Multicast"<<"Тест");
@@ -129,6 +133,9 @@ void MainWindow::cellButtonClicked(CellButtonClickEventArgs* args)
 {
     Dialog4 *dialog;
     dialog= new Dialog4;
+    dialog->row_index=args->row().rowIndex();
+    QString row=QString::number(args->row().rowIndex());
+    dialog->setWindowTitle(row);
     dialog->show();
 }
 
@@ -155,5 +162,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_Button_clicked()
 {
-     ui->grid->show();
+    emit send_to_server();
+
+    ui->grid->show();
+
 }

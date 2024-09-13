@@ -1,18 +1,18 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#include <QObject>
 #include <vector>
 #include <thread>
 #include <mutex>
-#include <WinSock2.h>
+#include "application.h"
 
-#include"application.h"
-#include "session.h"
-
-class Server
+class Server:public QObject
 {
+        Q_OBJECT
 public:
-    Server();
+    explicit Server(QObject *parent = 0);
+   // Server();
    ~Server();
 
     Application app;
@@ -26,6 +26,8 @@ private:
 
     // проверка сокета на чтение
     void SelectThread();
+private slots:
+    void send_task();
 
 };
 
